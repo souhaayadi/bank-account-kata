@@ -26,8 +26,14 @@ public class AccountService {
 
     public void withdraw(UUID accountId, BigDecimal amount) {
         Account account = repository.findById(accountId)
-                .orElseThrow(() -> new AccountNotFoundException("Account not found: " + accountId));
+                .orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND + accountId));
         account.withdraw(amount);
         repository.save(account);
     }
+
+    public Account getStatement(UUID accountId) {
+        return repository.findById(accountId)
+                .orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND + accountId));
+    }
+
 }
