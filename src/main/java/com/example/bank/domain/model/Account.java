@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static com.example.bank.domain.exceptions.ExceptionMessages.INSUFFICIENT_FUNDS;
+
 public class Account {
 
     private final UUID id;
@@ -14,6 +17,12 @@ public class Account {
         this.id = id;
         this.balance = BigDecimal.ZERO;
         this.transactions = new ArrayList<>();
+    }
+
+    public Account(UUID id, BigDecimal balance, List<Transaction> transactions) {
+        this.id = id;
+        this.balance = balance;
+        this.transactions = transactions;
     }
 
     public UUID getId() {
@@ -31,5 +40,13 @@ public class Account {
     public void deposit(BigDecimal amount) {
         balance = balance.add(amount);
         transactions.add(new Transaction(amount));
+    }
+
+    public void withdraw(BigDecimal amount) {
+        if (amount.compareTo(balance) > 0) {
+            throw new IllegalArgumentException(INSUFFICIENT_FUNDS);
+        }
+        balance = balance.subtract(amount);
+        transactions.add(new Transaction(amount.negate()));
     }
 }
