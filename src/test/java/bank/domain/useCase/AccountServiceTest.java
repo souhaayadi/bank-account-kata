@@ -1,7 +1,8 @@
 package bank.domain.useCase;
 
 import com.example.bank.domain.model.Account;
-import com.example.bank.domain.port.AccountRepository;
+import com.example.bank.domain.port.AccountPort;
+import com.example.bank.domain.useCase.AccountService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,13 +15,13 @@ import static org.mockito.Mockito.*;
 
 public class AccountServiceTest {
 
-    private AccountRepository repository;
+    private AccountPort repository;
     private AccountService service;
     private UUID accountId;
 
     @BeforeEach
     void setUp() {
-        repository = mock(AccountRepository.class);
+        repository = mock(AccountPort.class);
         service = new AccountService(repository);
         accountId = UUID.randomUUID();
     }
