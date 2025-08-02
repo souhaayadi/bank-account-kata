@@ -105,4 +105,38 @@ public class AccountServiceTest {
             verify(repository, never()).save(any());
         }
     }
+
+    @Nested
+    class getStatement {
+        @Test
+        void should_return_account_statement_with_all_transactions() {
+            // Given
+            Account account = new Account(accountId, BigDecimal.valueOf(100), new ArrayList<>());
+            account.deposit(BigDecimal.valueOf(50));
+            account.withdraw(BigDecimal.valueOf(30));
+
+            when(repository.findById(accountId)).thenReturn(Optional.of(account));
+
+            // When
+            Account result = service.getStatement(accountId);
+
+            // Then
+            assertEquals(accountId, result.getId());
+            assertEquals(BigDecimal.valueOf(120), result.getBalance());
+            assertEquals(2, result.getTransactions().size());
+        }
+
+        @Test
+        void should_throw_exception_when_getting_statement_of_nonexistent_account() {
+            // Given
+            when(repository.findById(accountId)).thenReturn(Optional.empty());
+
+            // When / Then
+            assertThrows(AccountNotFoundException.class, () ->
+                    service.getStatement(accountId)
+            );
+
+            verify(repository, never()).save(any());
+        }
+    }
 }
