@@ -15,10 +15,12 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 @SpringBootTest
@@ -79,4 +81,14 @@ public class AccountControllerTest {
         verify(accountService).withdraw(accountId, amount);
     }
 
+    @Test
+    void should_create_new_account_and_return_201_with_location() throws Exception {
+        UUID newAccountId = UUID.randomUUID();
+
+        when(accountService.createAccount()).thenReturn(newAccountId);
+
+        mockMvc.perform(post("/api/accounts"))
+                .andExpect(status().isCreated())
+                .andExpect(header().string("Location", "/api/accounts/" + newAccountId));
+    }
 }

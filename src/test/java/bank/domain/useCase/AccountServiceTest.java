@@ -138,4 +138,19 @@ public class AccountServiceTest {
             verify(repository, never()).save(any());
         }
     }
+    @Nested
+    class createAccount {
+        @Test
+        void should_create_new_account_with_zero_balance_and_empty_transactions() {
+            // When
+            UUID accountId = service.createAccount();
+
+            // Then
+            verify(repository).save(argThat(account ->
+                    account.getId().equals(accountId)
+                            && account.getBalance().compareTo(BigDecimal.ZERO) == 0
+                            && account.getTransactions().isEmpty()
+            ));
+        }
+    }
 }
