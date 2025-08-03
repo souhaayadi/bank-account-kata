@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.UUID;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -34,4 +35,13 @@ public class AccountController {
         service.withdraw(id, amount);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping
+    public ResponseEntity<Void> createAccount() {
+        UUID id = service.createAccount();
+        return ResponseEntity
+                .created(URI.create("/api/accounts/" + id))
+                .build();
+    }
+
 }

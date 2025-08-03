@@ -19,6 +19,13 @@ public class AccountService {
         this.repository = repository;
     }
 
+    public UUID createAccount() {
+        UUID id = UUID.randomUUID();
+        Account newAccount = new Account(id);
+        repository.save(newAccount);
+        return id;
+    }
+
     public void deposit(UUID accountId, BigDecimal amount) {
         Account account = repository.findById(accountId)
                 .orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND + accountId));
