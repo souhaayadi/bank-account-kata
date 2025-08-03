@@ -8,14 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 @SpringBootTest
@@ -45,4 +48,20 @@ public class AccountControllerTest {
                 .andExpect(jsonPath("$.transactions").isArray())
                 .andExpect(jsonPath("$.transactions.length()").value(2));
     }
+
+    @Test
+    void should_accept_deposit_request_and_return_ok() throws Exception {
+        UUID accountId = UUID.randomUUID();
+        BigDecimal amount = BigDecimal.valueOf(150);
+
+        mockMvc.perform(
+                     post("/api/accounts/" + accountId + "/deposit")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(amount.toString())
+                )
+                .andExpect(status().isOk());
+
+        verify(accountService).deposit(accountId, amount);
+    }
+
 }
