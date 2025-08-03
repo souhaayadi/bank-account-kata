@@ -33,7 +33,7 @@ public class AccountServiceTest {
         @Test
         void should_deposit_money_and_update_balance() {
             // Given
-            Account account = new Account(accountId);
+            Account account = new Account(accountId, BigDecimal.ZERO, new ArrayList<>());
             when(repository.findById(accountId)).thenReturn(Optional.of(account));
 
             // When

@@ -13,12 +13,6 @@ public class Account {
     private BigDecimal balance;
     private final List<Transaction> transactions;
 
-    public Account(UUID id) {
-        this.id = id;
-        this.balance = BigDecimal.ZERO;
-        this.transactions = new ArrayList<>();
-    }
-
     public Account(UUID id, BigDecimal balance, List<Transaction> transactions) {
         this.id = id;
         this.balance = balance;

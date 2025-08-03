@@ -36,6 +36,7 @@ class AccountAdapterTest {
 
         assertTrue(result.isPresent());
         assertEquals(accountId, result.get().getId());
-        assertEquals(BigDecimal.ZERO, result.get().getBalance());
+        assertEquals(0,
+                result.get().getBalance().compareTo(BigDecimal.ZERO));
     }
 }

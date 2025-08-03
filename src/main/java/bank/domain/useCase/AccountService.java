@@ -6,6 +6,7 @@ import bank.domain.port.AccountPort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import static bank.domain.exceptions.ExceptionMessages.ACCOUNT_NOT_FOUND;
@@ -21,7 +22,7 @@ public class AccountService {
 
     public UUID createAccount() {
         UUID id = UUID.randomUUID();
-        Account newAccount = new Account(id);
+        Account newAccount = new Account(id, BigDecimal.ZERO, new ArrayList<>());
         repository.save(newAccount);
         return id;
     }
