@@ -28,4 +28,10 @@ public class AccountController {
         service.deposit(id, amount);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/{id}/withdraw")
+    public ResponseEntity<Void> withdraw(@PathVariable UUID id, @RequestBody BigDecimal amount) {
+        service.withdraw(id, amount);
+        return ResponseEntity.ok().build();
+    }
 }
