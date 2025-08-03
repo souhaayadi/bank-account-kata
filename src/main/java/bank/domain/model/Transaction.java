@@ -1,4 +1,4 @@
-package com.example.bank.domain.model;
+package bank.domain.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

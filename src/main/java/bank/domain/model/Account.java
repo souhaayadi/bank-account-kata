@@ -1,11 +1,11 @@
-package com.example.bank.domain.model;
+package bank.domain.model;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static com.example.bank.domain.exceptions.ExceptionMessages.INSUFFICIENT_FUNDS;
+import static bank.domain.exceptions.ExceptionMessages.INSUFFICIENT_FUNDS;
 
 public class Account {
 

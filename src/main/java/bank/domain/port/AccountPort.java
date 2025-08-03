@@ -1,10 +1,10 @@
-package com.example.bank.domain.port;
+package bank.domain.port;
 
-import com.example.bank.domain.model.Account;
+import bank.domain.model.Account;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.UUID;
-
 public interface AccountPort {
 
     Optional<Account> findById(UUID accountId);

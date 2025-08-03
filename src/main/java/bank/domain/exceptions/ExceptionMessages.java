@@ -1,4 +1,4 @@
-package com.example.bank.domain.exceptions;
+package bank.domain.exceptions;
 
 public class ExceptionMessages {
 

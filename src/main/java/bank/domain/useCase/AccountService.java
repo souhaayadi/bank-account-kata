@@ -1,14 +1,16 @@
-package com.example.bank.domain.useCase;
+package bank.domain.useCase;
 
-import com.example.bank.domain.exceptions.AccountNotFoundException;
-import com.example.bank.domain.model.Account;
-import com.example.bank.domain.port.AccountPort;
+import bank.domain.exceptions.AccountNotFoundException;
+import bank.domain.model.Account;
+import bank.domain.port.AccountPort;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import static com.example.bank.domain.exceptions.ExceptionMessages.ACCOUNT_NOT_FOUND;
+import static bank.domain.exceptions.ExceptionMessages.ACCOUNT_NOT_FOUND;
 
+@Service
 public class AccountService {
 
     private final AccountPort repository;

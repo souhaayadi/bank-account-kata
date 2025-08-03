@@ -1,9 +1,8 @@
 package bank.domain.useCase;
 
-import com.example.bank.domain.exceptions.AccountNotFoundException;
-import com.example.bank.domain.model.Account;
-import com.example.bank.domain.port.AccountPort;
-import com.example.bank.domain.useCase.AccountService;
+import bank.domain.exceptions.AccountNotFoundException;
+import bank.domain.model.Account;
+import bank.domain.port.AccountPort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
