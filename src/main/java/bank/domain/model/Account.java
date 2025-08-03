@@ -1,7 +1,7 @@
 package bank.domain.model;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,7 +33,7 @@ public class Account {
 
     public void deposit(BigDecimal amount) {
         balance = balance.add(amount);
-        transactions.add(new Transaction(amount));
+        transactions.add(new Transaction(amount, LocalDateTime.now(), TransactionType.DEPOSIT));
     }
 
     public void withdraw(BigDecimal amount) {
@@ -41,6 +41,6 @@ public class Account {
             throw new IllegalArgumentException(INSUFFICIENT_FUNDS);
         }
         balance = balance.subtract(amount);
-        transactions.add(new Transaction(amount.negate()));
+        transactions.add(new Transaction(amount.negate(), LocalDateTime.now(), TransactionType.WITHDRAW));
     }
 }

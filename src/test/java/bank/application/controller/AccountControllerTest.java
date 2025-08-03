@@ -2,6 +2,7 @@ package bank.application.controller;
 
 import bank.domain.model.Account;
 import bank.domain.model.Transaction;
+import bank.domain.model.TransactionType;
 import bank.domain.useCase.AccountService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,8 +39,8 @@ public class AccountControllerTest {
     void should_return_account_statement_as_json() throws Exception {
         UUID accountId = UUID.randomUUID();
         Account account = new Account(accountId, BigDecimal.valueOf(120), List.of(
-                new Transaction(BigDecimal.valueOf(100)),
-                new Transaction(BigDecimal.valueOf(20))
+                new Transaction(BigDecimal.valueOf(100), LocalDateTime.now(), TransactionType.DEPOSIT),
+                new Transaction(BigDecimal.valueOf(20), LocalDateTime.now(), TransactionType.DEPOSIT)
         ));
 
         when(accountService.getStatement(accountId)).thenReturn(account);

@@ -2,7 +2,7 @@ package bank.infrastructure.adapter;
 
 import bank.domain.model.Account;
 import bank.domain.model.Transaction;
-import bank.domain.port.AccountPort;
+import bank.domain.model.TransactionType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,16 +25,13 @@ class AccountAdapterTest {
     @Autowired
     AccountAdapter accountAdapter;
 
-    @Autowired
-    AccountPort accountPort;
-
     @Test
     void should_save_and_get_account() {
         UUID accountId = UUID.randomUUID();
         Account account = new Account(accountId, BigDecimal.ZERO, List.of());
-        accountPort.save(account);
+        accountAdapter.save(account);
 
-        Optional<Account> result = accountPort.findById(accountId);
+        Optional<Account> result = accountAdapter.findById(accountId);
 
         assertTrue(result.isPresent());
         assertEquals(accountId, result.get().getId());
@@ -47,8 +44,8 @@ class AccountAdapterTest {
         UUID id = UUID.randomUUID();
 
         List<Transaction> transactions = List.of(
-                new Transaction(null, BigDecimal.valueOf(50), LocalDateTime.now(), TransactionType.DEPOSIT),
-                new Transaction(null, BigDecimal.valueOf(30), LocalDateTime.now(), TransactionType.WITHDRAWAL)
+                new Transaction( BigDecimal.valueOf(50), LocalDateTime.now(), TransactionType.DEPOSIT),
+                new Transaction( BigDecimal.valueOf(30), LocalDateTime.now(), TransactionType.WITHDRAW)
         );
 
         Account account = new Account(id, BigDecimal.valueOf(20), transactions);
@@ -60,6 +57,7 @@ class AccountAdapterTest {
 
         Account result = loaded.get();
         assertEquals(2, result.getTransactions().size());
-        assertEquals(BigDecimal.valueOf(20), result.getBalance());
+        assertEquals(0,
+                result.getBalance().compareTo(BigDecimal.valueOf(20)));
     }
 }
