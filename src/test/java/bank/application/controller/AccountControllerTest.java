@@ -64,4 +64,19 @@ public class AccountControllerTest {
         verify(accountService).deposit(accountId, amount);
     }
 
+    @Test
+    void should_accept_withdraw_request_and_return_ok() throws Exception {
+        UUID accountId = UUID.randomUUID();
+        BigDecimal amount = BigDecimal.valueOf(75);
+
+        mockMvc.perform(
+                        post("/api/accounts/" + accountId + "/withdraw")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(amount.toString())
+                )
+                .andExpect(status().isOk());
+
+        verify(accountService).withdraw(accountId, amount);
+    }
+
 }
