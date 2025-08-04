@@ -11,7 +11,7 @@ import java.util.UUID;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/accounts")
+@RequestMapping("/api/accounts")
 public class AccountController {
 
     private final AccountService service;

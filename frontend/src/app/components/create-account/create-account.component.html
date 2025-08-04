@@ -1,1 +1,13 @@
-<p>create-account works!</p>
+<div class="card">
+  <h1>Créer un nouveau compte</h1>
+
+  <div class="box">
+    <button (click)="onCreateAccount()">
+      {{'Créer un compte' }}
+    </button>
+
+    <div *ngIf="accountId" class="success">
+      ✅ Compte créé avec succès !
+    </div>
+  </div>
+</div>

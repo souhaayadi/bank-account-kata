@@ -1,15 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { AccountService } from '../../services/account.service';
 
 @Component({
   selector: 'app-create-account',
   templateUrl: './create-account.component.html',
   styleUrls: ['./create-account.component.scss']
 })
-export class CreateAccountComponent implements OnInit {
+export class CreateAccountComponent {
+  accountId: string | null = null;
 
-  constructor() { }
+  constructor(private accountService: AccountService) {}
 
-  ngOnInit(): void {
+  onCreateAccount(): void {
+    this.accountService.createAccount().subscribe(response => {
+      const locationHeader = response.headers.get('Location');
+      if (locationHeader) {
+        this.accountId = locationHeader.split('/').pop() ?? null;
+      }
+    });
   }
-
 }
