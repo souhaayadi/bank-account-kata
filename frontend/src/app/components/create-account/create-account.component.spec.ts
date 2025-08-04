@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CreateAccountComponent } from './create-account.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
+import {Router} from '@angular/router';
 
 describe('CreateAccountComponent', () => {
   let component: CreateAccountComponent;
@@ -10,6 +11,14 @@ describe('CreateAccountComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [CreateAccountComponent],
+      providers: [
+        {
+          provide: Router,
+          useValue: {
+            navigate: jasmine.createSpy(('navigate'))
+          }
+        }
+      ],
       imports: [HttpClientTestingModule]
     }).compileComponents();
   });

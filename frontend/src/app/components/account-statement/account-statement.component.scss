@@ -1,0 +1,52 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+  url('https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1740&q=80') no-repeat center center;
+  background-size: cover;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+  background-color: rgba(255, 255, 255, 0.96);
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 550px;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 25px;
+  font-size: 28px;
+  color: #333;
+}
+
+h3 {
+  margin-top: 30px;
+  color: #444;
+}
+
+.transaction-list {
+  margin-top: 20px;
+  list-style: none;
+  padding: 0;
+  text-align: left;
+}
+
+.transaction-list li {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  font-size: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.no-transaction {
+  color: #999;
+  font-style: italic;
+  margin-top: 20px;
+}

@@ -14,4 +14,7 @@ export class AccountService {
     return this.http.post(this.baseUrl, {}, { observe: 'response' });
   }
 
+  getStatement(id: string): Observable<any> {
+    return this.http.get(`/api/accounts/${id}/statement`);
+  }
 }

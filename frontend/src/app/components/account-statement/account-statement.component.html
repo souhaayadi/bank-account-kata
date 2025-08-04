@@ -1,0 +1,19 @@
+<div class="card">
+  <h1>Relevé du compte</h1>
+
+  <p><strong>ID :</strong> {{ accountId }}</p>
+  <p><strong>Solde :</strong> {{ balance }} €</p>
+
+  <h3>Transactions</h3>
+
+  <ul class="transaction-list" *ngIf="transactions.length > 0; else noTx">
+    <li *ngFor="let tx of transactions">
+      <span>{{ tx.date | date:'short' }} - {{ tx.type }}</span>
+      <strong>{{ tx.amount }} €</strong>
+    </li>
+  </ul>
+
+  <ng-template #noTx>
+    <p class="no-transaction">Aucune transaction enregistrée.</p>
+  </ng-template>
+</div>
