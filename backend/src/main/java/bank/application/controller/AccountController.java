@@ -45,8 +45,8 @@ public class AccountController {
 
     @PostMapping("/{id}/withdraw")
     @Operation(summary = "retrait de l'argent d'un compte bancaire")
-    public ResponseEntity<Void> withdraw(@PathVariable UUID id, @RequestBody BigDecimal amount) {
-        service.withdraw(id, amount);
+    public ResponseEntity<Void> withdraw(@PathVariable UUID id, @RequestBody AmountRequest request) {
+        service.withdraw(id, request.amount());
         return ResponseEntity.ok().build();
     }
 

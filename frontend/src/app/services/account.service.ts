@@ -21,4 +21,8 @@ export class AccountService {
   deposit(accountId: string, amount: number): Observable<void> {
     return this.http.post<void>(`/api/accounts/${accountId}/deposit`, { amount });
   }
+
+  withdraw(accountId: string, amount: number): Observable<void> {
+    return this.http.post<void>(`/api/accounts/${accountId}/withdraw`, { amount });
+  }
 }

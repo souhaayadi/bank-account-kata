@@ -1,0 +1,10 @@
+<div class="withdraw-container">
+  <div class="withdraw-card">
+    <h2>Retrait</h2>
+    <p>Compte : {{ accountId }}</p>
+    <input type="number" placeholder="Montant à retirer" [(ngModel)]="amount" />
+    <button (click)="onWithdraw()">Retirer</button>
+
+    <p class="success-message" *ngIf="successMessage">{{ successMessage }}</p>
+  </div>
+</div>
