@@ -1,0 +1,9 @@
+<div class="card">
+  <h2>Dépôt</h2>
+  <p>Compte : {{ accountId }}</p>
+
+  <input type="number" [(ngModel)]="amount" placeholder="Montant à déposer" />
+  <button (click)="onDeposit()">Déposer</button>
+
+  <p *ngIf="success" class="success">💸 Dépôt effectué avec succès !</p>
+</div>

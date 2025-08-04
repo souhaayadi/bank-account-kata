@@ -12,7 +12,7 @@
       <strong>{{ tx.amount }} €</strong>
     </li>
   </ul>
-
+  <a [routerLink]="['/deposit', accountId]">Faire un dépôt</a>
   <ng-template #noTx>
     <p class="no-transaction">Aucune transaction enregistrée.</p>
   </ng-template>

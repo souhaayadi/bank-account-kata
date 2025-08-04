@@ -1,5 +1,6 @@
 package bank.application.controller;
 
+import bank.application.controller.DTO.AmountRequest;
 import bank.domain.model.Account;
 import bank.domain.useCase.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,8 +38,8 @@ public class AccountController {
 
     @PostMapping("/{id}/deposit")
     @Operation(summary = "ajouter de l'argent dans un compte bancaire")
-    public ResponseEntity<Void> deposit(@PathVariable UUID id, @RequestBody BigDecimal amount) {
-        service.deposit(id, amount);
+    public ResponseEntity<Void> deposit(@PathVariable UUID id, @RequestBody AmountRequest request) {
+        service.deposit(id, request.amount());
         return ResponseEntity.ok().build();
     }
 

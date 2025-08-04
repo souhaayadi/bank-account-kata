@@ -17,4 +17,8 @@ export class AccountService {
   getStatement(id: string): Observable<any> {
     return this.http.get(`/api/accounts/${id}/statement`);
   }
+
+  deposit(accountId: string, amount: number): Observable<void> {
+    return this.http.post<void>(`/api/accounts/${accountId}/deposit`, { amount });
+  }
 }
