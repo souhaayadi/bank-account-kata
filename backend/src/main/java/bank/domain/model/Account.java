@@ -1,11 +1,15 @@
 package bank.domain.model;
 
+import bank.domain.exceptions.InsufficientBalanceException;
+import bank.domain.exceptions.InvalidAmountException;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 import static bank.domain.exceptions.ExceptionMessages.INSUFFICIENT_FUNDS;
+import static bank.domain.exceptions.ExceptionMessages.INVALID_AMOUNT;
 
 public class Account {
 
@@ -32,15 +36,27 @@ public class Account {
     }
 
     public void deposit(BigDecimal amount) {
+        validateAmount(amount);
         balance = balance.add(amount);
         transactions.add(new Transaction(amount, LocalDateTime.now(), TransactionType.DEPOSIT));
     }
 
     public void withdraw(BigDecimal amount) {
-        if (amount.compareTo(balance) > 0) {
-            throw new IllegalArgumentException(INSUFFICIENT_FUNDS);
-        }
+        validateBalance(amount);
+        validateAmount(amount);
         balance = balance.subtract(amount);
         transactions.add(new Transaction(amount.negate(), LocalDateTime.now(), TransactionType.WITHDRAW));
+    }
+
+    private void validateBalance(BigDecimal amount) {
+        if (amount.compareTo(balance) > 0) {
+            throw new InsufficientBalanceException(INSUFFICIENT_FUNDS);
+        }
+    }
+
+    private static void validateAmount(BigDecimal amount) {
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new InvalidAmountException(INVALID_AMOUNT);
+        }
     }
 }

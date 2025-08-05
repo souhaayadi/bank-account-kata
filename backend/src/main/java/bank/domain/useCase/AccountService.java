@@ -1,6 +1,7 @@
 package bank.domain.useCase;
 
 import bank.domain.exceptions.AccountNotFoundException;
+import bank.domain.exceptions.InvalidAmountException;
 import bank.domain.model.Account;
 import bank.domain.port.AccountPort;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import static bank.domain.exceptions.ExceptionMessages.ACCOUNT_NOT_FOUND;
+import static bank.domain.exceptions.ExceptionMessages.INVALID_AMOUNT;
 
 @Service
 public class AccountService {
@@ -28,22 +30,20 @@ public class AccountService {
     }
 
     public void deposit(UUID accountId, BigDecimal amount) {
-        Account account = repository.findById(accountId)
-                .orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND + accountId));
+        Account account = getAccountWithDetails(accountId);
         account.deposit(amount);
         repository.save(account);
     }
 
     public void withdraw(UUID accountId, BigDecimal amount) {
-        Account account = repository.findById(accountId)
-                .orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND + accountId));
+        Account account = getAccountWithDetails(accountId);
         account.withdraw(amount);
         repository.save(account);
     }
 
-    public Account getStatement(UUID accountId) {
+    public Account getAccountWithDetails(UUID accountId) {
         return repository.findById(accountId)
-                .orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND + accountId));
+                .orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND + ' ' + accountId));
     }
 
 }

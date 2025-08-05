@@ -20,7 +20,9 @@ export class CreateAccountComponent {
       if (locationHeader) {
         this.accountId = locationHeader.split('/').pop() ?? null;
       }
-      this.router.navigate(['/statement', this.accountId]);
+      setTimeout(() => {
+        this.router.navigate(['/statement', this.accountId]);
+      }, 1500);
     });
   }
 }

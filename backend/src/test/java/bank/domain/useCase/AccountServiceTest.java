@@ -1,6 +1,8 @@
 package bank.domain.useCase;
 
 import bank.domain.exceptions.AccountNotFoundException;
+import bank.domain.exceptions.InsufficientBalanceException;
+import bank.domain.exceptions.InvalidAmountException;
 import bank.domain.model.Account;
 import bank.domain.port.AccountPort;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,6 +59,19 @@ public class AccountServiceTest {
             verify(repository, never()).save(any());
 
         }
+        @Test
+        void should_throw_exception_when_depositing_a_not_valid_amount() {
+            // Given
+            Account account = new Account(accountId, BigDecimal.ZERO, new ArrayList<>());
+            when(repository.findById(accountId)).thenReturn(Optional.of(account));
+
+            //when //then
+            assertThrows(InvalidAmountException.class, () ->
+                    service.deposit(accountId, BigDecimal.valueOf(-2)));
+
+            verify(repository, never()).save(any());
+
+        }
     }
 
     @Nested
@@ -83,7 +98,7 @@ public class AccountServiceTest {
             when(repository.findById(accountId)).thenReturn(Optional.of(account));
 
             // When / Then
-            assertThrows(IllegalArgumentException.class, () ->
+            assertThrows(InsufficientBalanceException.class, () ->
                     service.withdraw(accountId, BigDecimal.valueOf(150))
             );
 
@@ -103,6 +118,20 @@ public class AccountServiceTest {
 
             verify(repository, never()).save(any());
         }
+
+        @Test
+        void should_throw_exception_when_withdrawing_an_invalid_amount() {
+            // Given
+            Account account = new Account(accountId, BigDecimal.valueOf(100), new ArrayList<>());
+            when(repository.findById(accountId)).thenReturn(Optional.of(account));
+
+            // When / Then
+            assertThrows(InvalidAmountException.class, () ->
+                    service.withdraw(accountId, BigDecimal.valueOf(-3))
+            );
+
+            verify(repository, never()).save(any());
+        }
     }
 
     @Nested
@@ -117,7 +146,7 @@ public class AccountServiceTest {
             when(repository.findById(accountId)).thenReturn(Optional.of(account));
 
             // When
-            Account result = service.getStatement(accountId);
+            Account result = service.getAccountWithDetails(accountId);
 
             // Then
             assertEquals(accountId, result.getId());
@@ -132,7 +161,7 @@ public class AccountServiceTest {
 
             // When / Then
             assertThrows(AccountNotFoundException.class, () ->
-                    service.getStatement(accountId)
+                    service.getAccountWithDetails(accountId)
             );
 
             verify(repository, never()).save(any());

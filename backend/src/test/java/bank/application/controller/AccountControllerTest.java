@@ -1,9 +1,11 @@
 package bank.application.controller;
 
+import bank.application.controller.dto.AmountRequest;
 import bank.domain.model.Account;
 import bank.domain.model.Transaction;
 import bank.domain.model.TransactionType;
 import bank.domain.useCase.AccountService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,7 +19,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -32,6 +33,9 @@ public class AccountControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private ObjectMapper objectMapper = new ObjectMapper();
+
     @MockBean
     private AccountService accountService;
 
@@ -43,7 +47,7 @@ public class AccountControllerTest {
                 new Transaction(BigDecimal.valueOf(20), LocalDateTime.now(), TransactionType.DEPOSIT)
         ));
 
-        when(accountService.getStatement(accountId)).thenReturn(account);
+        when(accountService.getAccountWithDetails(accountId)).thenReturn(account);
 
         mockMvc.perform(get("/api/accounts/" + accountId + "/statement"))
                 .andExpect(status().isOk())
@@ -57,11 +61,12 @@ public class AccountControllerTest {
     void should_accept_deposit_request_and_return_ok() throws Exception {
         UUID accountId = UUID.randomUUID();
         BigDecimal amount = BigDecimal.valueOf(150);
+        AmountRequest request = new AmountRequest(amount);
 
         mockMvc.perform(
                      post("/api/accounts/" + accountId + "/deposit")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(amount.toString())
+                                .content(objectMapper.writeValueAsString(request))
                 )
                 .andExpect(status().isOk());
 
@@ -72,11 +77,12 @@ public class AccountControllerTest {
     void should_accept_withdraw_request_and_return_ok() throws Exception {
         UUID accountId = UUID.randomUUID();
         BigDecimal amount = BigDecimal.valueOf(75);
+        AmountRequest request = new AmountRequest(amount);
 
         mockMvc.perform(
                         post("/api/accounts/" + accountId + "/withdraw")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(amount.toString())
+                                .content(objectMapper.writeValueAsString(request))
                 )
                 .andExpect(status().isOk());
 

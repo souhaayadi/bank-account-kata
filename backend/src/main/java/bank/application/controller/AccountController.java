@@ -1,13 +1,12 @@
 package bank.application.controller;
 
-import bank.application.controller.DTO.AmountRequest;
+import bank.application.controller.dto.AmountRequest;
 import bank.domain.model.Account;
 import bank.domain.useCase.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 import java.net.URI;
 
@@ -33,7 +32,7 @@ public class AccountController {
     @GetMapping("/{id}/statement")
     @Operation(summary = "récupérer un compte bancaire avec ses transactions")
     public ResponseEntity<Account> getStatement(@PathVariable UUID id) {
-        return ResponseEntity.ok(service.getStatement(id));
+        return ResponseEntity.ok(service.getAccountWithDetails(id));
     }
 
     @PostMapping("/{id}/deposit")
