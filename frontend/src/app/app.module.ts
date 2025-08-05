@@ -12,6 +12,7 @@ import {WithdrawComponent} from './components/withdraw/withdraw.component';
 import {HttpErrorInterceptor} from './interceptors/http-error.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     CreateAccountComponent,
     AccountStatementComponent,
     DepositComponent,
-    WithdrawComponent
+    WithdrawComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
