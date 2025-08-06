@@ -1,6 +1,7 @@
 package bank.application.controller;
 
 import bank.application.controller.dto.AmountRequest;
+import bank.application.controller.dto.CreateAccountRequest;
 import bank.domain.model.Account;
 import bank.domain.model.Transaction;
 import bank.domain.model.TransactionType;
@@ -92,11 +93,15 @@ public class AccountControllerTest {
     @Test
     void should_create_new_account_and_return_201_with_location() throws Exception {
         UUID newAccountId = UUID.randomUUID();
+        CreateAccountRequest request = new CreateAccountRequest("ayadi@gmail.com", "123");
 
-        when(accountService.createAccount()).thenReturn(newAccountId);
+        when(accountService.createAccountWithUser("ayadi@gmail.com", "123")).thenReturn(newAccountId);
 
-        mockMvc.perform(post("/api/accounts"))
+        mockMvc.perform(post("/api/accounts")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                )
                 .andExpect(status().isCreated())
-                .andExpect(header().string("Location", "/api/accounts/" + newAccountId));
+                .andExpect(header().string("Location", "/accounts/" + newAccountId));
     }
 }

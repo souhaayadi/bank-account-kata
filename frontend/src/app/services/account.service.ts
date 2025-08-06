@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import {User} from "../models/user.model";
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +11,8 @@ export class AccountService {
 
   constructor(private http: HttpClient) {}
 
-  createAccount(): Observable<any> {
-    return this.http.post(this.baseUrl, {}, { observe: 'response' });
+  createAccount(user:User): Observable<any> {
+    return this.http.post(this.baseUrl, user, { observe: 'response' });
   }
 
   getStatement(id: string): Observable<any> {

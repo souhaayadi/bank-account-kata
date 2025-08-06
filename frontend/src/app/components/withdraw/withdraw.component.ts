@@ -26,7 +26,7 @@ export class WithdrawComponent implements OnInit {
   onWithdraw(): void {
     this.accountService.withdraw(this.accountId, this.amount).subscribe({
       next: () => {
-        this.successMessage = 'Retrait effectué avec succès.';
+        this.successMessage = '💸 Retrait effectué avec succès.';
         this.errorMessage = '';
         setTimeout(() => {
           this.router.navigate(['/statement', this.accountId]);

@@ -1,4 +1,4 @@
-package bank.infrastructure.entiy;
+package bank.infrastructure.entity;
 
 import bank.domain.model.TransactionType;
 import jakarta.persistence.Column;

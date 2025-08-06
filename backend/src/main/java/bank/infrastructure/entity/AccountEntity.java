@@ -1,4 +1,4 @@
-package bank.infrastructure.entiy;
+package bank.infrastructure.entity;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "ACCOUNT")
+@Table(name = "ACCOUNT_TABLE")
 public class AccountEntity {
 
     @Id
@@ -18,6 +18,9 @@ public class AccountEntity {
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TransactionEntity> transactions = new ArrayList<>();
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "account")
+    private UserEntity user;
 
     public UUID getId() {
         return id;
@@ -42,4 +45,13 @@ public class AccountEntity {
     public void setTransactions(List<TransactionEntity> transactions) {
         this.transactions = transactions;
     }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
 }

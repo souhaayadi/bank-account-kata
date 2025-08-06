@@ -5,28 +5,41 @@ import bank.domain.exceptions.InsufficientBalanceException;
 import bank.domain.exceptions.InvalidAmountException;
 import bank.domain.model.Account;
 import bank.domain.port.AccountPort;
+import bank.domain.port.UserPort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.argThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class AccountServiceTest {
-
-    private AccountPort repository;
+    @Mock
+    private AccountPort accountPort;
+    @Mock
+    private UserPort userPort;
+    @InjectMocks
     private AccountService service;
     private UUID accountId;
 
     @BeforeEach
     void setUp() {
-        repository = mock(AccountPort.class);
-        service = new AccountService(repository);
+        userPort = mock(UserPort.class);
+        accountPort = mock(AccountPort.class);
+        service = new AccountService(accountPort, userPort);
         accountId = UUID.randomUUID();
     }
 
@@ -36,7 +49,7 @@ public class AccountServiceTest {
         void should_deposit_money_and_update_balance() {
             // Given
             Account account = new Account(accountId, BigDecimal.ZERO, new ArrayList<>());
-            when(repository.findById(accountId)).thenReturn(Optional.of(account));
+            when(accountPort.findById(accountId)).thenReturn(Optional.of(account));
 
             // When
             service.deposit(accountId, BigDecimal.valueOf(100));
@@ -44,32 +57,32 @@ public class AccountServiceTest {
             // Then
             assertEquals(BigDecimal.valueOf(100), account.getBalance());
             assertEquals(1, account.getTransactions().size());
-            verify(repository).save(account);
+            verify(accountPort).save(account);
         }
 
         @Test
         void should_throw_exception_when_depositing_on_none_existing_account() {
             // Given
-            when(repository.findById(accountId)).thenReturn(Optional.empty());
+            when(accountPort.findById(accountId)).thenReturn(Optional.empty());
 
             //when //then
             assertThrows(AccountNotFoundException.class, () ->
                     service.deposit(accountId, BigDecimal.valueOf(100)));
 
-            verify(repository, never()).save(any());
+            verify(accountPort, never()).save(any());
 
         }
         @Test
         void should_throw_exception_when_depositing_a_not_valid_amount() {
             // Given
             Account account = new Account(accountId, BigDecimal.ZERO, new ArrayList<>());
-            when(repository.findById(accountId)).thenReturn(Optional.of(account));
+            when(accountPort.findById(accountId)).thenReturn(Optional.of(account));
 
             //when //then
             assertThrows(InvalidAmountException.class, () ->
                     service.deposit(accountId, BigDecimal.valueOf(-2)));
 
-            verify(repository, never()).save(any());
+            verify(accountPort, never()).save(any());
 
         }
     }
@@ -80,7 +93,7 @@ public class AccountServiceTest {
         void should_withdraw_money_and_update_balance() {
             // Given
             Account account = new Account(accountId, BigDecimal.valueOf(200), new ArrayList<>());
-            when(repository.findById(accountId)).thenReturn(Optional.of(account));
+            when(accountPort.findById(accountId)).thenReturn(Optional.of(account));
 
             // When
             service.withdraw(accountId, BigDecimal.valueOf(150));
@@ -88,49 +101,49 @@ public class AccountServiceTest {
             // Then
             assertEquals(BigDecimal.valueOf(50), account.getBalance());
             assertEquals(1, account.getTransactions().size());
-            verify(repository).save(account);
+            verify(accountPort).save(account);
         }
 
         @Test
         void should_throw_exception_when_withdrawing_more_than_balance() {
             // Given
             Account account = new Account(accountId, BigDecimal.valueOf(100), new ArrayList<>());
-            when(repository.findById(accountId)).thenReturn(Optional.of(account));
+            when(accountPort.findById(accountId)).thenReturn(Optional.of(account));
 
             // When / Then
             assertThrows(InsufficientBalanceException.class, () ->
                     service.withdraw(accountId, BigDecimal.valueOf(150))
             );
 
-            verify(repository, never()).save(any());
+            verify(accountPort, never()).save(any());
         }
 
 
         @Test
         void should_throw_exception_when_withdrawing_on_nonexistent_account() {
             // Given
-            when(repository.findById(accountId)).thenReturn(Optional.empty());
+            when(accountPort.findById(accountId)).thenReturn(Optional.empty());
 
             // When / Then
             assertThrows(AccountNotFoundException.class, () ->
                     service.withdraw(accountId, BigDecimal.valueOf(100))
             );
 
-            verify(repository, never()).save(any());
+            verify(accountPort, never()).save(any());
         }
 
         @Test
         void should_throw_exception_when_withdrawing_an_invalid_amount() {
             // Given
             Account account = new Account(accountId, BigDecimal.valueOf(100), new ArrayList<>());
-            when(repository.findById(accountId)).thenReturn(Optional.of(account));
+            when(accountPort.findById(accountId)).thenReturn(Optional.of(account));
 
             // When / Then
             assertThrows(InvalidAmountException.class, () ->
                     service.withdraw(accountId, BigDecimal.valueOf(-3))
             );
 
-            verify(repository, never()).save(any());
+            verify(accountPort, never()).save(any());
         }
     }
 
@@ -143,7 +156,7 @@ public class AccountServiceTest {
             account.deposit(BigDecimal.valueOf(50));
             account.withdraw(BigDecimal.valueOf(30));
 
-            when(repository.findById(accountId)).thenReturn(Optional.of(account));
+            when(accountPort.findById(accountId)).thenReturn(Optional.of(account));
 
             // When
             Account result = service.getAccountWithDetails(accountId);
@@ -157,14 +170,14 @@ public class AccountServiceTest {
         @Test
         void should_throw_exception_when_getting_statement_of_nonexistent_account() {
             // Given
-            when(repository.findById(accountId)).thenReturn(Optional.empty());
+            when(accountPort.findById(accountId)).thenReturn(Optional.empty());
 
             // When / Then
             assertThrows(AccountNotFoundException.class, () ->
                     service.getAccountWithDetails(accountId)
             );
 
-            verify(repository, never()).save(any());
+            verify(accountPort, never()).save(any());
         }
     }
     @Nested
@@ -172,10 +185,12 @@ public class AccountServiceTest {
         @Test
         void should_create_new_account_with_zero_balance_and_empty_transactions() {
             // When
-            UUID accountId = service.createAccount();
+            when(userPort.existsByEmail("ayadisouhaaa@gmail.com")).thenReturn(false);
+
+            UUID accountId = service.createAccountWithUser("ayadisouhaaa@gmail.com", "123");
 
             // Then
-            verify(repository).save(argThat(account ->
+            verify(accountPort).save(argThat(account ->
                     account.getId().equals(accountId)
                             && account.getBalance().compareTo(BigDecimal.ZERO) == 0
                             && account.getTransactions().isEmpty()

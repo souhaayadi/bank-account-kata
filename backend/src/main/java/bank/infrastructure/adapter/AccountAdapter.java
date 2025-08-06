@@ -2,8 +2,8 @@ package bank.infrastructure.adapter;
 
 import bank.domain.model.Account;
 import bank.domain.port.AccountPort;
-import bank.infrastructure.entiy.AccountEntity;
-import bank.infrastructure.entiy.TransactionEntity;
+import bank.infrastructure.entity.AccountEntity;
+import bank.infrastructure.entity.TransactionEntity;
 import bank.infrastructure.mapper.AccountMapper;
 import bank.infrastructure.repository.AccountRepository;
 import org.springframework.stereotype.Repository;
@@ -28,11 +28,11 @@ public class AccountAdapter implements AccountPort {
     }
 
     @Override
-    public void save(Account account) {
+    public Account save(Account account) {
         AccountEntity entity = accountMapper.toEntity(account);
         for (TransactionEntity transaction : entity.getTransactions()) {
             transaction.setAccount(entity);
         }
-        accountRepository.save(entity);
+       return accountMapper.toDomain(accountRepository.save(entity));
     }
 }

@@ -1,7 +1,7 @@
 package bank.infrastructure.mapper;
 
 import bank.domain.model.Transaction;
-import bank.infrastructure.entiy.TransactionEntity;
+import bank.infrastructure.entity.TransactionEntity;
 import org.mapstruct.Mapper;
 
 import java.util.List;

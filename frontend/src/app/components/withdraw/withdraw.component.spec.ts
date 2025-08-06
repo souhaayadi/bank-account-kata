@@ -3,7 +3,8 @@ import { WithdrawComponent } from './withdraw.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
+import { Router } from '@angular/router';
+import {RouterTestingModule} from "@angular/router/testing";
 
 describe('WithdrawComponent', () => {
   let component: WithdrawComponent;
@@ -12,12 +13,18 @@ describe('WithdrawComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [WithdrawComponent],
-      imports: [FormsModule, HttpClientTestingModule],
+      imports: [FormsModule, HttpClientTestingModule, RouterTestingModule],
       providers: [
         {
           provide: ActivatedRoute,
           useValue: {
             snapshot: { paramMap: { get: () => 'test-account-id' } }
+          }
+        },
+        {
+          provide: Router,
+          useValue: {
+            snapshot: { navigate: jasmine.createSpy('navigate')}
           }
         }
       ]

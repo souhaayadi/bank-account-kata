@@ -1,20 +1,58 @@
-<div class="card">
-  <h1>Relevé du compte</h1>
+<div class="statement-page">
+  <main class="content">
+    <section class="card">
+      <h1>Relevé du compte</h1>
+      <div class="meta">
+        <div><span class="label">ID :</span> <span class="value">{{ accountId }}</span></div>
+        <div>
+          <span class="label">Solde :</span>
+          <span class="value" [class.negative]="balance < 0">
+{{ balance | currency:'EUR':'symbol':'1.0-0' }}
+          </span>
+        </div>
+      </div>
 
-  <p><strong>ID :</strong> {{ accountId }}</p>
-  <p><strong>Solde :</strong> {{ balance }} €</p>
+      <div class="actions">
+        <button mat-raised-button color="primary" (click)="goDeposit()">Faire un dépôt</button>
+        <button mat-raised-button color="accent" (click)="goWithdraw()">Faire un retrait</button>
 
-  <h3>Transactions</h3>
+        <span class="spacer"></span>
+      </div>
 
-  <ul class="transaction-list" *ngIf="transactions.length > 0; else noTx">
-    <li *ngFor="let tx of transactions">
-      <span>{{ tx.date | date:'short' }} - {{ tx.type }}</span>
-      <strong>{{ tx.amount }} €</strong>
-    </li>
-  </ul>
-  <a [routerLink]="['/deposit', accountId]">Faire un dépôt</a><br>
-  <a [routerLink]="['/withdraw', accountId]">Faire un retrait</a>
-  <ng-template #noTx>
-    <p class="no-transaction">Aucune transaction enregistrée.</p>
-  </ng-template>
+      <div *ngIf="dataSource.data.length; else noTx" class="table-wrapper mat-elevation-z2">
+        <table mat-table [dataSource]="dataSource" matSort>
+
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>Type</th>
+            <td mat-cell *matCellDef="let tx" [ngClass]="tx.type.toLowerCase()">
+              {{ tx.type === 'DEPOSIT' ? 'Dépôt' : 'Retrait' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Montant</th>
+            <td mat-cell *matCellDef="let tx" [class.negative]="tx.type==='WITHDRAW'">
+              {{ (tx.type === 'WITHDRAW' ? -tx.amount : tx.amount) | currency:'EUR':'symbol':'1.2-2' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>Date</th>
+            <td mat-cell *matCellDef="let tx">
+              {{ tx.date | date:'dd/MM/yyyy HH:mm' }}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [pageSize]="5" [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator>
+      </div>
+
+      <ng-template #noTx>
+        <div class="empty">Aucune transaction enregistrée.</div>
+      </ng-template>
+    </section>
+  </main>
 </div>

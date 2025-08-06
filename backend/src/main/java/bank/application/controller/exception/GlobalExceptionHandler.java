@@ -1,5 +1,6 @@
 package bank.application.controller.exception;
 
+import bank.domain.exceptions.AccountExistsException;
 import bank.domain.exceptions.AccountNotFoundException;
 import bank.domain.exceptions.InsufficientBalanceException;
 import bank.domain.exceptions.InvalidAmountException;
@@ -23,6 +24,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidAmountException.class)
     public ResponseEntity<String> handleInvalidAmount(InvalidAmountException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+    @ExceptionHandler(AccountExistsException.class)
+    public ResponseEntity<String> handleInvalidAmount(AccountExistsException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 

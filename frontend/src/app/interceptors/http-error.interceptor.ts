@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { MatSnackBar } from '@angular/material/snack-bar'; // ou autre service d'alerte
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {

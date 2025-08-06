@@ -1,7 +1,6 @@
 package bank.infrastructure.repository;
 
-
-import bank.infrastructure.entiy.AccountEntity;
+import bank.infrastructure.entity.AccountEntity;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
